@@ -1,6 +1,6 @@
 ## About
 
-Jamflox is a fork of the open source Runescape client 'Runelite' but with the good features re-enabled. 
+Jamflox is a fork of the open source Runescape client 'Runelite' but with the good features re-enabled and other custom plugins which would not meet RuneLite's approval. 
 
 ## Project Layout
 
