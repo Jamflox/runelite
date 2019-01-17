@@ -271,4 +271,14 @@ public interface MenuEntrySwapperConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			keyName = "swapSmith",
+			name = "Smithing",
+			description = "Swap Smith 1 with Smith All when smithing."
+	)
+	default boolean swapSmith()
+	{
+		return false;
+	}
 }
