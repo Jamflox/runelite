@@ -17,6 +17,7 @@ Please use a basic level of discretion when using this client, since it does not
 - Fight Caves & Jad Plugin
 - Antidrag Plugin: Can be toggled to be always on or always off, as opposed to only when shift-clicking.
 - Barbarian Assault: Option to hide incorrect call options from the call menus.
+- Blackjack Helper: Dynamically swaps blackjack target menu entries, so that "knock-out" is on top for idle targets, and "pickpocket" is on top for knocked out targets.
 
 ### License
 
