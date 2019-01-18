@@ -31,8 +31,12 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
+
+import net.runelite.api.Client;
+import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.api.Projectile;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.plugins.Plugin;
@@ -40,7 +44,9 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "AoE projectile warning plugin"
+	name = "AoE projectile warning plugin",
+	description = "Configuration for the AoE Projectile Warnings plugin",
+	tags = "test"
 )
 public class AoeWarningPlugin extends Plugin
 {
@@ -49,6 +55,9 @@ public class AoeWarningPlugin extends Plugin
 
 	@Inject
 	AoeWarningConfig config;
+
+	@Inject
+	private Client client;
 
 	private final Map<Projectile, AoeProjectile> projectiles = new HashMap<>();
 
@@ -64,11 +73,6 @@ public class AoeWarningPlugin extends Plugin
 		return configManager.getConfig(AoeWarningConfig.class);
 	}
 
-	@Override
-	public Overlay getOverlay()
-	{
-		return overlay;
-	}
 
 	public Map<Projectile, AoeProjectile> getProjectiles()
 	{
@@ -97,7 +101,8 @@ public class AoeWarningPlugin extends Plugin
 		AoeProjectileInfo aoeProjectileInfo = AoeProjectileInfo.getById(projectileId);
 		if (aoeProjectileInfo != null && isConfigEnabledForProjectileId(projectileId))
 		{
-			Point targetPoint = event.getPosition();
+			LocalPoint targetPoint = event.getPosition();
+			//Point targetPoint = Perspective.localToCanvas(client, lp, client.getPlane(), 0);
 			AoeProjectile aoeProjectile = new AoeProjectile(Instant.now(), targetPoint, aoeProjectileInfo);
 			projectiles.put(projectile, aoeProjectile);
 		}
