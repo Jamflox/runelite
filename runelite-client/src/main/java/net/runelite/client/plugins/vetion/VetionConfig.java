@@ -22,22 +22,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.blackjack;
+package net.runelite.client.plugins.vetion;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("blackjack")
-public interface BlackjackConfig extends Config
+@ConfigGroup("vetion")
+public interface VetionConfig extends Config
 {
     @ConfigItem(
-            keyName = "menuSwapActive",
-            name = "Dynamic Menu Swap",
-            description = "Configures whether or not blackjack targets have their menu entries dynamically swapped",
+            keyName = "earthquakeTimerActive",
+            name = "Vet'ion Earthquake Timer",
+            description = "Configures whether or not a timer is shown to track the cooldown of Vet'ion's earthquake attack",
             position = 0
     )
-    default boolean menuSwapActive()
+    default boolean eartquakeTimerActive()
     {
         return true;
     }

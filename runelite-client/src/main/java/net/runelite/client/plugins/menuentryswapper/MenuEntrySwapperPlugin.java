@@ -537,6 +537,12 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("use", option, target, true);
 		}
+		else if (config.swapSmith())
+		{
+			swap("smith all", option, target, true);
+			swap("smith all sets", option, target, true);
+
+		}
 	}
 
 	@Subscribe
