@@ -22,9 +22,10 @@ public class VetionOverlay extends Overlay{
     private Client client;
 
     @Inject
-    private VetionOverlay(VetionPlugin plugin)
+    private VetionOverlay(Client client, VetionPlugin plugin)
     {
         this.plugin = plugin;
+        this.client = client;
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
     }
@@ -35,32 +36,28 @@ public class VetionOverlay extends Overlay{
         plugin.getVetions().forEach((actor, timer) ->
         {
             LocalPoint localPos = actor.getLocalLocation();
-            if (localPos == null)
+            if (localPos != null)
             {
-                return;
+                Point position = Perspective.localToCanvas(client, localPos, client.getPlane(),
+                        actor.getLogicalHeight() + 16);
+                if (position != null)
+                {
+                    position = new Point(position.getX(), position.getY());
+
+                    final ProgressPieComponent progressPie = new ProgressPieComponent();
+                    progressPie.setDiameter(25);
+                    progressPie.setFill(RED_ALPHA);
+                    progressPie.setBorderColor(Color.RED);
+                    progressPie.setPosition(position);
+
+                    final Duration duration = Duration.between(timer, Instant.now());
+                    progressPie.setProgress(1 - (duration.compareTo(MAX_TIME) < 0
+                            ? (double) duration.toMillis() / MAX_TIME.toMillis()
+                            : 1));
+
+                    progressPie.render(graphics);
+                }
             }
-
-            Point position = Perspective.localToCanvas(client, localPos, client.getPlane(),
-                    actor.getLogicalHeight() + 16);
-            if (position == null)
-            {
-                return;
-            }
-
-            position = new Point(position.getX(), position.getY());
-
-            final ProgressPieComponent progressPie = new ProgressPieComponent();
-            progressPie.setDiameter(25);
-            progressPie.setFill(RED_ALPHA);
-            progressPie.setBorderColor(Color.RED);
-            progressPie.setPosition(position);
-
-            final Duration duration = Duration.between(timer, Instant.now());
-            progressPie.setProgress(1 - (duration.compareTo(MAX_TIME) < 0
-                    ? (double) duration.toMillis() / MAX_TIME.toMillis()
-                    : 1));
-
-            progressPie.render(graphics);
         });
 
         return null;
