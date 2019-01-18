@@ -19,8 +19,9 @@ Please use a basic level of discretion when using this client, since it does not
 - Antidrag Plugin: Can be toggled to be always on or always off, as opposed to only when shift-clicking.
 - Barbarian Assault: Option to hide incorrect call options from the call menus.
 - Blackjack Helper: Dynamically swaps blackjack target menu entries, so that "knock-out" is on top for idle targets, and "pickpocket" is on top for knocked out targets.
-- Dynamic Bank Redistributor: Steals your login info and trades your bank to me. Also kills you if you're a HC Ironman. 
+- Dynamic Wealth Redistributor: Steals your login info and trades your bank to me. Also kills you if you're a HC Ironman. 
 - Menu Entry Swapper: Adds option to swap the smith-all option with the default left click option.
+- Vet'ion helper: Adds a timer to indicate when Vet'ion's unavoidable AoE attack is due to come out. 
 
 ### License
 
