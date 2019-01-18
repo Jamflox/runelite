@@ -45,7 +45,7 @@ public class VetionOverlay extends Overlay{
                     position = new Point(position.getX(), position.getY());
 
                     final ProgressPieComponent progressPie = new ProgressPieComponent();
-                    progressPie.setDiameter(25);
+                    progressPie.setDiameter(30);
                     progressPie.setFill(RED_ALPHA);
                     progressPie.setBorderColor(Color.RED);
                     progressPie.setPosition(position);
