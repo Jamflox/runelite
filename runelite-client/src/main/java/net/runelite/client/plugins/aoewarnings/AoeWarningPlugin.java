@@ -24,47 +24,50 @@
  */
 package net.runelite.client.plugins.aoewarnings;
 
-import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
-import com.google.inject.Provides;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 
-import net.runelite.api.Client;
-import net.runelite.api.Perspective;
-import net.runelite.api.Point;
+import com.google.inject.Provides;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.api.events.ProjectileMoved;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayManager;
 
 @PluginDescriptor(
 	name = "AoE projectile warning plugin",
 	description = "Configuration for the AoE Projectile Warnings plugin",
-	tags = "test"
+	tags = {"combat", "pve", "overlay"}
 )
 public class AoeWarningPlugin extends Plugin
 {
+
 	@Inject
 	AoeWarningOverlay overlay;
 
 	@Inject
-	AoeWarningConfig config;
+	private OverlayManager overlayManager;
 
 	@Inject
-	private Client client;
+	AoeWarningConfig config;
 
 	private final Map<Projectile, AoeProjectile> projectiles = new HashMap<>();
 
+
 	@Override
-	public void configure(Binder binder)
+	protected void startUp() throws Exception
 	{
-		binder.bind(AoeWarningOverlay.class);
+		overlayManager.add(overlay);
+	}
+	@Override
+	protected void shutDown() throws Exception
+	{
+		overlayManager.remove(overlay);
 	}
 
 	@Provides
@@ -72,7 +75,6 @@ public class AoeWarningPlugin extends Plugin
 	{
 		return configManager.getConfig(AoeWarningConfig.class);
 	}
-
 
 	public Map<Projectile, AoeProjectile> getProjectiles()
 	{
@@ -102,7 +104,6 @@ public class AoeWarningPlugin extends Plugin
 		if (aoeProjectileInfo != null && isConfigEnabledForProjectileId(projectileId))
 		{
 			LocalPoint targetPoint = event.getPosition();
-			//Point targetPoint = Perspective.localToCanvas(client, lp, client.getPlane(), 0);
 			AoeProjectile aoeProjectile = new AoeProjectile(Instant.now(), targetPoint, aoeProjectileInfo);
 			projectiles.put(projectile, aoeProjectile);
 		}
