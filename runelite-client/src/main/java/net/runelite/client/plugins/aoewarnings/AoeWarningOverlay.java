@@ -27,7 +27,6 @@ package net.runelite.client.plugins.aoewarnings;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.time.Instant;
 import java.util.Iterator;
@@ -89,8 +88,17 @@ public class AoeWarningOverlay extends Overlay
 			// how far through the projectiles lifetime between 0-1.
 			double progress = (System.currentTimeMillis() - aoeProjectile.getStartTime().toEpochMilli()) / (double) aoeProjectile.getAoeProjectileInfo().getLifeTime().toMillis();
 
-			int fillAlpha = (int) ((1 - progress) * FILL_START_ALPHA);//alpha drop off over lifetime
-			int outlineAlpha = (int) ((1 - progress) * OUTLINE_START_ALPHA);
+			int fillAlpha, outlineAlpha;
+			if (config.isFadeEnabled())
+			{
+				fillAlpha = (int) ((1 - progress) * FILL_START_ALPHA);//alpha drop off over lifetime
+				outlineAlpha = (int) ((1 - progress) * OUTLINE_START_ALPHA);
+			}
+			else
+			{
+				fillAlpha = FILL_START_ALPHA;
+				outlineAlpha = OUTLINE_START_ALPHA;
+			}
 
 			if (fillAlpha < 0)
 			{

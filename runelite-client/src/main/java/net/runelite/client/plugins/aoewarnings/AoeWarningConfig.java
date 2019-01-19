@@ -180,4 +180,14 @@ public interface AoeWarningConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			keyName = "fade",
+			name = "Fade Warnings",
+			description = "Configures whether or not AoE Projectile Warnings fade over time"
+	)
+	default boolean isFadeEnabled()
+	{
+		return true;
+	}
 }

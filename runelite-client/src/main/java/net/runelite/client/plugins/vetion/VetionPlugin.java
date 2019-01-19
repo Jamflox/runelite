@@ -28,7 +28,6 @@ import com.google.inject.Provides;
 import lombok.Getter;
 import net.runelite.api.*;
 import net.runelite.api.events.AnimationChanged;
-import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -71,7 +70,6 @@ public class VetionPlugin extends Plugin {
     @Override
     protected void startUp()
     {
-        //eqTimes = new HashMap<>();
         vetions = new HashMap<>();
         overlayManager.add(overlay);
     }
@@ -89,7 +87,6 @@ public class VetionPlugin extends Plugin {
     {
         if (config.eartquakeTimerActive() && event.getActor().getAnimation() == AnimationID.VETION_EARTHQUAKE)
         {
-            System.out.println("EQ");
             Actor vet = event.getActor();
             vetions.remove(vet, Instant.now());
             vetions.put(vet, Instant.now());
