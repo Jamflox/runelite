@@ -15,6 +15,7 @@ Please use a basic level of discretion when using this client, since it does not
 
 ## Current differences with RuneLite
 
+- AoE Projectile Warning Plugin
 - Fight Caves & Jad Plugin
 - Antidrag Plugin: Can be toggled to be always on or always off, as opposed to only when shift-clicking.
 - Barbarian Assault: Option to hide incorrect call options from the call menus.
