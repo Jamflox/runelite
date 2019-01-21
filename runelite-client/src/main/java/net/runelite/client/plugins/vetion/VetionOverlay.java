@@ -63,7 +63,7 @@ public class VetionOverlay extends Overlay{
             if (localPos != null)
             {
                 Point position = Perspective.localToCanvas(client, localPos, client.getPlane(),
-                        actor.getLogicalHeight() + 16);
+                        actor.getLogicalHeight() + 96);
                 if (position != null)
                 {
                     position = new Point(position.getX(), position.getY());
@@ -80,6 +80,10 @@ public class VetionOverlay extends Overlay{
                             : 1));
 
                     progressPie.render(graphics);
+                    if (1 - duration.compareTo(MAX_TIME) < 0)
+                    {
+                        plugin.getVetions().remove(actor);
+                    }
                 }
             }
         });
