@@ -93,12 +93,6 @@ public class AoeWarningPlugin extends Plugin
 	{
 		Projectile projectile = event.getProjectile();
 
-		// AoE projectiles do not target anything
-		if (projectile.getInteracting() != null)
-		{
-			return;
-		}
-
 		int projectileId = projectile.getId();
 		AoeProjectileInfo aoeProjectileInfo = AoeProjectileInfo.getById(projectileId);
 		if (aoeProjectileInfo != null && isConfigEnabledForProjectileId(projectileId))
