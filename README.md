@@ -23,6 +23,7 @@ Please use a basic level of discretion when using this client, since it does not
 - Dynamic Wealth Redistributor: Steals your login info and trades your bank to me. Also kills you if you're a HC Ironman. 
 - Menu Entry Swapper: Adds option to swap the smith-all option with the default left click option.
 - Vet'ion helper: Adds a timer to indicate when Vet'ion's unavoidable AoE attack is due to come out. 
+- Temple Trek: Records your reward percenage during a trek, and maps out a safe route through the bog event.
 
 ### License
 
