@@ -13,6 +13,7 @@ This repo is kept public because I don't mind other people using it.
 
 - AoE Projectile Warnings
 - Fight Caves & Jad
+- Zulrah Helper
 
 **Modifications to existing plugins**
 

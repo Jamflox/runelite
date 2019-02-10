@@ -155,6 +155,7 @@ public final class AnimationID
 	public static final int HELLHOUND_DEFENCE = 6566;
 	public static final int BLACKJACK_KO = 838;
 	public static final int VETION_EARTHQUAKE = 5507;
+	public static final int ZULRAH_DEATH = 5804;
 
 	// Farming
 	public static final int FARMING_HARVEST_FRUIT_TREE = 2280;
