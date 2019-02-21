@@ -48,10 +48,10 @@ public enum AoeProjectileInfo
 	/**
 	 * The AOEs of Vorkath
 	 */
-	VORKATH_BOMB(ProjectileID.VORKATH_BOMB_AOE, 2400, 3),
-	VORKATH_POISON_POOL(ProjectileID.VORKATH_POISON_POOL_AOE, 1800, 1),
-	VORKATH_SPAWN(ProjectileID.VORKATH_SPAWN_AOE, 3000, 1), //extra tick because hard to see otherwise
-	VORKATH_TICK_FIRE(ProjectileID.VORKATH_TICK_FIRE_AOE, 600, 1),
+	VORKATH_BOMB(ProjectileID.VORKATH_BOMB_AOE, 2400, 3, 26),
+	VORKATH_POISON_POOL(ProjectileID.VORKATH_POISON_POOL_AOE, 1800, 1, 10),
+	VORKATH_SPAWN(ProjectileID.VORKATH_SPAWN_AOE, 3000, 1, 10), //extra tick because hard to see otherwise
+	VORKATH_TICK_FIRE(ProjectileID.VORKATH_TICK_FIRE_AOE, 600, 1, 10),
 
 	/**
 	 * the AOEs of Galvek
@@ -65,7 +65,7 @@ public enum AoeProjectileInfo
 	/**
 	 * the AOE of Vet'ion
 	 */
-	VETION_LIGHTNING(ProjectileID.VETION_LIGHTNING, 3000, 1),
+	VETION_LIGHTNING(ProjectileID.VETION_LIGHTNING, 3000, 1, 0),
 
 	/**
 	 * the AOE of Chaos Fanatic
@@ -110,6 +110,12 @@ public enum AoeProjectileInfo
 	 */
 	private final int aoeSize;
 
+	/**
+	 * The change in cycle timing needed to ensure that the target point
+	 * is correct
+	 */
+	private final int cycleOffset;
+
 	private static final Map<Integer, AoeProjectileInfo> map = new HashMap<>();
 
 	static
@@ -125,6 +131,15 @@ public enum AoeProjectileInfo
 		this.id = id;
 		this.lifeTime = Duration.ofMillis(lifeTimeMillis);
 		this.aoeSize = aoeSize;
+		this.cycleOffset = 0;
+	}
+
+	AoeProjectileInfo(int id, int lifeTimeMillis, int aoeSize, int cycleOffset)
+	{
+		this.id = id;
+		this.lifeTime = Duration.ofMillis(lifeTimeMillis);
+		this.aoeSize = aoeSize;
+		this.cycleOffset = cycleOffset;
 	}
 
 	public Duration getLifeTime()
@@ -140,6 +155,11 @@ public enum AoeProjectileInfo
 	public int getAoeSize()
 	{
 		return aoeSize;
+	}
+
+	public int getCycleOffset()
+	{
+		return cycleOffset;
 	}
 
 	public static AoeProjectileInfo getById(int id)

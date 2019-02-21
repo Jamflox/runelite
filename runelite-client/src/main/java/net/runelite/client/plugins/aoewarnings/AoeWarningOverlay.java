@@ -24,21 +24,23 @@
  */
 package net.runelite.client.plugins.aoewarnings;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
+import java.awt.*;
 import java.time.Instant;
+import java.time.temporal.TemporalUnit;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
+import net.runelite.api.Point;
 import net.runelite.api.Projectile;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 public class AoeWarningOverlay extends Overlay
 {
@@ -66,19 +68,28 @@ public class AoeWarningOverlay extends Overlay
 		{
 			return null;
 		}
-
 		Instant now = Instant.now();
 		Map<Projectile, AoeProjectile> projectiles = plugin.getProjectiles();
 		for (Iterator<AoeProjectile> it = projectiles.values().iterator(); it.hasNext();)
 		{
 			AoeProjectile aoeProjectile = it.next();
 
-			if (now.isAfter(aoeProjectile.getStartTime().plus(aoeProjectile.getAoeProjectileInfo().getLifeTime())))
+			//Extra 200 MS is to compensate for the potential delay induced by the switch to game tick checking
+			if (now.isAfter(aoeProjectile.getStartTime().plus(aoeProjectile.getAoeProjectileInfo().getLifeTime())
+					.plus(200, MILLIS)))
 			{
 				it.remove();
 				continue;
 			}
 
+			Point point = Perspective.localToCanvas(client, aoeProjectile.getTargetPoint(), client.getPlane());
+			graphics.setStroke(new BasicStroke(2));
+			graphics.setColor(Color.RED);
+			graphics.fillOval(
+					point.getX(),
+					point.getY(),
+					10,
+					10);
 			Polygon tilePoly = Perspective.getCanvasTileAreaPoly(client, aoeProjectile.getTargetPoint(), aoeProjectile.getAoeProjectileInfo().getAoeSize());
 			if (tilePoly == null)
 			{
@@ -125,7 +136,7 @@ public class AoeWarningOverlay extends Overlay
 			}
 
 			graphics.setColor(new Color(255, 0, 0, fillAlpha));
-			graphics.fillPolygon(tilePoly);
+			//graphics.fillPolygon(tilePoly);
 		}
 		return null;
 	}
