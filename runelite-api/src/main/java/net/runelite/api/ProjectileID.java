@@ -44,7 +44,7 @@ public class ProjectileID
 	public static final int VASA_RANGED_AOE = 1329;
 	public static final int TEKTON_METEOR_AOE = 660;
 
-	public static final int OLM_FALLING_CRYSTAL_AOE = -1; //please help
+	public static final int OLM_FALLING_CRYSTAL_AOE = 1357; //please help
 	public static final int OLM_BURNING_AOE = -1;
 
 	public static final int VORKATH_BOMB_AOE = 1481;

@@ -35,7 +35,10 @@ import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.events.BeforeRender;
+import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.GraphicChanged;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -113,7 +116,7 @@ public class AoeWarningPlugin extends Plugin
 	 */
 
 	@Subscribe
-	public void onGameTick(GameTick event)
+	public void onClientTick(ClientTick event)
 	{
 		List<Projectile> projectileList = client.getProjectiles();
 		if (projectileList.isEmpty())
@@ -124,6 +127,9 @@ public class AoeWarningPlugin extends Plugin
 		for (Projectile projectile : projectileList)
 		{
 			if (projectiles.containsKey(projectile)) {
+				continue;
+			}
+			if (projectile == null) {
 				continue;
 			}
 			LocalPoint targetPoint = getEndTile(projectile);
@@ -188,6 +194,7 @@ public class AoeWarningPlugin extends Plugin
 	}
 
 	private LocalPoint getEndTile(Projectile projectile) {
+
 		int cycleOffset = AoeProjectileInfo.getById(projectile.getId()).getCycleOffset();
 		/*
 		int endX = (int)Math.round((projectile.getX1() + (projectile.getVelocityX() *

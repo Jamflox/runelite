@@ -76,13 +76,14 @@ public class AoeWarningOverlay extends Overlay
 
 			//Extra 200 MS is to compensate for the potential delay induced by the switch to game tick checking
 			if (now.isAfter(aoeProjectile.getStartTime().plus(aoeProjectile.getAoeProjectileInfo().getLifeTime())
-					.plus(200, MILLIS)))
+					.plus(300, MILLIS)))
 			{
 				it.remove();
 				continue;
 			}
 
-			Point point = Perspective.localToCanvas(client, aoeProjectile.getTargetPoint(), client.getPlane());
+			//Point point = Perspective.localToCanvas(client, aoeProjectile.getTargetPoint(), client.getPlane());
+			/*
 			graphics.setStroke(new BasicStroke(2));
 			graphics.setColor(Color.RED);
 			graphics.fillOval(
@@ -90,6 +91,7 @@ public class AoeWarningOverlay extends Overlay
 					point.getY(),
 					10,
 					10);
+			*/
 			Polygon tilePoly = Perspective.getCanvasTileAreaPoly(client, aoeProjectile.getTargetPoint(), aoeProjectile.getAoeProjectileInfo().getAoeSize());
 			if (tilePoly == null)
 			{
@@ -136,7 +138,7 @@ public class AoeWarningOverlay extends Overlay
 			}
 
 			graphics.setColor(new Color(255, 0, 0, fillAlpha));
-			//graphics.fillPolygon(tilePoly);
+			graphics.fillPolygon(tilePoly);
 		}
 		return null;
 	}
