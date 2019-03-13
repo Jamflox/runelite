@@ -11,7 +11,8 @@ This repo is kept public because I don't mind other people using it.
 
 **Old Plugins, updated and re-enabled**
 
-- AoE Projectile Warnings
+
+- AoE Projectile Warnings **Currently broken, expect a fix Soon™**
 - Fight Caves & Jad
 - Zulrah Helper
 
