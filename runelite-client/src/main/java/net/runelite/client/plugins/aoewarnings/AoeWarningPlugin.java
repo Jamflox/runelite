@@ -26,14 +26,21 @@ package net.runelite.client.plugins.aoewarnings;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
 import com.google.inject.Provides;
+import net.runelite.api.Client;
+import net.runelite.api.Perspective;
 import net.runelite.api.Projectile;
 import net.runelite.api.coords.LocalPoint;
-import net.runelite.client.config.ConfigManager;
+import net.runelite.api.events.BeforeRender;
+import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.GraphicChanged;
 import net.runelite.api.events.ProjectileMoved;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -46,6 +53,8 @@ import net.runelite.client.ui.overlay.OverlayManager;
 )
 public class AoeWarningPlugin extends Plugin
 {
+	@Inject
+	private Client client;
 
 	@Inject
 	AoeWarningOverlay overlay;
@@ -86,8 +95,10 @@ public class AoeWarningPlugin extends Plugin
 	 * projectiles that target the ground, like AoE projectiles from
 	 * Lizardman Shamans, this is only called once
 	 *
-	 * @param event Projectile moved event
-	 */
+	 * //@param event Projectile moved event
+	 *
+	 * The event is currently broken for ground-targeted projectiles
+
 	@Subscribe
 	public void onProjectileMoved(ProjectileMoved event)
 	{
@@ -100,6 +111,35 @@ public class AoeWarningPlugin extends Plugin
 			LocalPoint targetPoint = event.getPosition();
 			AoeProjectile aoeProjectile = new AoeProjectile(Instant.now(), targetPoint, aoeProjectileInfo);
 			projectiles.put(projectile, aoeProjectile);
+		}
+	}
+	 */
+
+	@Subscribe
+	public void onClientTick(ClientTick event)
+	{
+		List<Projectile> projectileList = client.getProjectiles();
+		if (projectileList.isEmpty())
+		{
+			return;
+		}
+
+		for (Projectile projectile : projectileList)
+		{
+			if (projectiles.containsKey(projectile)) {
+				continue;
+			}
+			if (projectile == null) {
+				continue;
+			}
+			LocalPoint targetPoint = getEndTile(projectile);
+			int projectileId = projectile.getId();
+			AoeProjectileInfo aoeProjectileInfo = AoeProjectileInfo.getById(projectileId);
+			if (aoeProjectileInfo != null && isConfigEnabledForProjectileId(projectileId))
+			{
+				AoeProjectile aoeProjectile = new AoeProjectile(Instant.now(), targetPoint, aoeProjectileInfo);
+				projectiles.put(projectile, aoeProjectile);
+			}
 		}
 	}
 
@@ -151,5 +191,43 @@ public class AoeWarningPlugin extends Plugin
 		}
 
 		return false;
+	}
+
+	private LocalPoint getEndTile(Projectile projectile) {
+
+		int cycleOffset = AoeProjectileInfo.getById(projectile.getId()).getCycleOffset();
+		/*
+		int endX = (int)Math.round((projectile.getX1() + (projectile.getVelocityX() *
+				((projectile.getEndCycle() - projectile.getStartMovementCycle()) + 0))));
+		int endY = (int)Math.round((projectile.getY1() + (projectile.getVelocityY() *
+				((projectile.getEndCycle() - projectile.getStartMovementCycle()) + 0))));
+		endX = Math.round(endX / (Perspective.LOCAL_TILE_SIZE)) * (Perspective.LOCAL_TILE_SIZE) +
+				(Perspective.LOCAL_TILE_SIZE / 2);
+		endY = Math.round(endY / (Perspective.LOCAL_TILE_SIZE)) * (Perspective.LOCAL_TILE_SIZE) +
+				(Perspective.LOCAL_TILE_SIZE / 2);
+		endX = endX + (Perspective.LOCAL_TILE_SIZE / 2);
+		endY = endY + (Perspective.LOCAL_TILE_SIZE / 2);
+		*/
+		//double endX = (projectile.getVelocityX() * (projectile.getEndCycle() + 1 - client.getGameCycle())) + projectile.getX();
+		//double endY = (projectile.getVelocityY() * (projectile.getEndCycle() + 1 - client.getGameCycle())) + projectile.getY();
+		double endX = (projectile.getVelocityX() * (projectile.getEndCycle() + cycleOffset - projectile.getStartMovementCycle())) + projectile.getX1();
+		double endY = (projectile.getVelocityY() * (projectile.getEndCycle() + cycleOffset - projectile.getStartMovementCycle())) + projectile.getY1();
+
+		//endX = Math.round(endX / 128) * 128;
+		//endY = Math.round(endY / 128) * 128;
+		System.out.println("Before mod: endX: " + endX + ", endY: " + endY);
+		endX = closestTile(endX);
+		endY = closestTile(endY);
+		System.out.println("End Cycle: " + + projectile.getEndCycle() + ", Current Cycle: " + client.getGameCycle() + ", endX: " + endX + ", endY: " + endY);
+		LocalPoint endTile = new LocalPoint((int)endX, (int)endY);
+		return endTile;
+	}
+
+	int closestTile(double coord) {
+		long base = Math.round(coord / 128) * 128;
+		long up = base + 64;
+		long down = base - 64;
+		long a = Math.min(Math.abs(up - coord), Math.abs(down - coord)) == Math.abs(up - coord) ? up : down;
+		return (int)a;
 	}
 }
