@@ -81,7 +81,7 @@ import org.apache.commons.text.WordUtils;
 public class ChatCommandsPlugin extends Plugin
 {
 	private static final float HIGH_ALCHEMY_CONSTANT = 0.6f;
-	private static final Pattern KILLCOUNT_PATTERN = Pattern.compile("Your (.+) kill count is: <col=ff0000>(\\d+)</col>");
+	private static final Pattern KILLCOUNT_PATTERN = Pattern.compile("Your (.+) (?:kill|harvest) count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern RAIDS_PATTERN = Pattern.compile("Your completed (.+) count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern WINTERTODT_PATTERN = Pattern.compile("Your subdued Wintertodt count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern BARROWS_PATTERN = Pattern.compile("Your Barrows chest count is: <col=ff0000>(\\d+)</col>");
@@ -366,6 +366,11 @@ public class ChatCommandsPlugin extends Plugin
 			return;
 		}
 
+		if (message.length() <= KILLCOUNT_COMMAND_STRING.length())
+		{
+			return;
+		}
+
 		ChatMessageType type = chatMessage.getType();
 		String search = message.substring(KILLCOUNT_COMMAND_STRING.length() + 1);
 
@@ -483,6 +488,11 @@ public class ChatCommandsPlugin extends Plugin
 			return;
 		}
 
+		if (message.length() <= PB_COMMAND.length())
+		{
+			return;
+		}
+
 		ChatMessageType type = chatMessage.getType();
 		String search = message.substring(PB_COMMAND.length() + 1);
 
@@ -574,6 +584,11 @@ public class ChatCommandsPlugin extends Plugin
 			return;
 		}
 
+		if (message.length() <= PRICE_COMMAND_STRING.length())
+		{
+			return;
+		}
+
 		MessageNode messageNode = chatMessage.getMessageNode();
 		String search = message.substring(PRICE_COMMAND_STRING.length() + 1);
 
@@ -637,6 +652,11 @@ public class ChatCommandsPlugin extends Plugin
 		}
 		else
 		{
+			if (message.length() <= LEVEL_COMMAND_STRING.length())
+			{
+				return;
+			}
+
 			search = message.substring(LEVEL_COMMAND_STRING.length() + 1);
 		}
 
@@ -1088,6 +1108,8 @@ public class ChatCommandsPlugin extends Plugin
 				return "Wintertodt";
 			case "barrows":
 				return "Barrows Chests";
+			case "herbi":
+				return "Herbiboar";
 
 			// cox
 			case "cox":

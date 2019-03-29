@@ -476,7 +476,19 @@ public enum Varbits
 	TREK_POINTS(1955),
 	TREK_STARTED(1956),
 	TREK_EVENT(1958),
-	TREK_STATUS(6719);
+	TREK_STATUS(6719),
+
+	/**
+	 * Type of GE offer currently being created
+	 * 0 = buy
+	 * 1 = sell
+	 */
+	GE_OFFER_CREATION_TYPE(4397),
+
+	/**
+	 * The active tab within the quest interface
+	 */
+	QUEST_TAB(8168);
 
 	/**
 	 * The raw varbit ID.
