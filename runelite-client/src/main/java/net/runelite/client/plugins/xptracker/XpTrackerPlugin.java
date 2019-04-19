@@ -254,7 +254,6 @@ public class XpTrackerPlugin extends Plugin
 		int currentXp = client.getSkillExperience(skill);
 		xpState.resetSkill(skill, currentXp);
 		xpPanel.resetSkill(skill);
-		xpPanel.updateTotal(xpState.getTotalSnapshot());
 	}
 
 	/**
@@ -265,7 +264,8 @@ public class XpTrackerPlugin extends Plugin
 	{
 		for (Skill s : Skill.values())
 		{
-			if (skill != s)
+			// Overall is not reset from resetting individual skills
+			if (skill != s && s != Skill.OVERALL)
 			{
 				resetSkillState(s);
 			}
@@ -305,7 +305,9 @@ public class XpTrackerPlugin extends Plugin
 		if (skill == Skill.CONSTRUCTION && updateResult == XpUpdateResult.INITIALIZED)
 		{
 			// Construction is the last skill initialized on login, now initialize the total experience
-			xpState.initializeSkill(Skill.OVERALL, client.getOverallExperience());
+			long overallXp = client.getOverallExperience();
+			log.debug("Initializing XP tracker with {} overall exp", overallXp);
+			xpState.initializeSkill(Skill.OVERALL, overallXp);
 		}
 		else if (xpState.isInitialized(Skill.OVERALL))
 		{
